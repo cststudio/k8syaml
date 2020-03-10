@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod # 声明pod
+metadata:
+  name: busybox-pod
+spec:
+  containers:
+  - name: busybox
+    image: latelee/busybox # 镜像名称，真实存在
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: NAME
+      value: 'hello'
+    command:
+    - sleep
+    - "3600"
+
+  - name: busybox11
+    image: latelee/busybox:1.1 # 镜像名称，真实存在
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: NAME
+      value: 'world'
+    command:
+    - sleep
+    - "3600"
