@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+  - name: busybox
+    image: latelee/busybox
+    imagePullPolicy: IfNotPresent
+    command: [ "/bin/sh", "-c", "ls /etc/config/" ]
+    volumeMounts:
+      - name: config-volume
+        mountPath: /etc/myconfig
+  volumes:
+    - name: config-volume
+      configMap:
+        name: special-config1
+  nodeSelector:
+    ntype: hello
+  restartPolicy: Never
