@@ -3,15 +3,15 @@ kind: ReplicationController
 metadata:
   name: busybox
   labels:
-    name: busybox
+    app: busybox
 spec:
   replicas: 2
   selector:
-    name: busybox
+    app: busybox
   template:
     metadata:
       labels:
-        name: busybox
+        app: busybox
     spec:
       containers:
       - name: busybox
