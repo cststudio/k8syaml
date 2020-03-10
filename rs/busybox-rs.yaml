@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: ReplicaSet # 声明rs
+metadata:
+  name: frontend
+  labels:
+    app: busybox
+    tier: frontend
+spec:
+  replicas: 2 # !! 此处为2个副本
+  selector:
+    matchLabels:
+      tier: frontend
+    matchExpressions:
+      - {key: tier, operator: In, values: [frontend]}
+  template:
+    metadata:
+      labels:
+        app: busybox  ## 指定标签
+        tier: frontend
+    spec:
+      containers:
+      - name: busybox
+        image: latelee/busybox # 镜像名称，真实存在
+        imagePullPolicy: IfNotPresent
+        command:
+        - sleep
+        - "3600"
