@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: busybox-job3
+spec:
+  completions: 3
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: latelee/busybox
+        command: ["sh",  "-c", "for i in {1..5}; do echo $i; sleep 1; done"]
+      restartPolicy: Never
+  backoffLimit: 4
