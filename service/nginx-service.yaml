@@ -5,7 +5,7 @@ metadata:
   labels:
    app: nginx
 spec:
-  replicas: 2 # tells deployment to run 2 pods matching the template
+  replicas: 3 # tells deployment to run 2 pods matching the template
   selector:
     matchLabels:
       app: nginx
@@ -31,7 +31,7 @@ metadata:
   namespace: default
 spec:
   ports:
-  - port: 89 # 对外为88端口
+  - port: 88 # 对外为88端口
     targetPort: 80
   selector:
     app: nginx
