@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: DaemonSet # 声明DaemonSet
+metadata:
+  name: mysql-ds
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+      release: stable
+  template:
+    metadata:
+      labels:
+        app: mysql
+        release: stable
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        imagePullPolicy: IfNotPresent
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet # 声明DaemonSet
+metadata:
+  name: wordpress-ds
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      release: stable
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        release: stable
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress
+        imagePullPolicy: IfNotPresent
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet # 声明DaemonSet
+metadata:
+  name: redis-ds
+spec:
+  selector:
+    matchLabels:
+      app: redis
+      release: stable
+  template:
+    metadata:
+      labels:
+        app: redis
+        release: stable
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine #latelee/redis
+        imagePullPolicy: IfNotPresent
