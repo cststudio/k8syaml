@@ -1,0 +1,130 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-wordpress
+  labels:
+    app: wordpress
+    type: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+      type: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        type: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: WORDPRESS_DB_HOST
+            value: "wp-mysql-svc"  # 此值对应下面的mysql服务名称
+          - name: WORDPRESS_DB_USER
+            value: "root"
+          - name: WORDPRESS_DB_PASSWORD
+            value: "password"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-svc
+  labels:
+    app: wordpress
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+    nodePort: 30600 # 指定容器的80端口映射为节点主机的30600
+  selector:
+    app: wordpress
+  type: NodePort
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-mysql
+  labels:
+    app: wordpress
+    type: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+      type: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        type: mysql
+    spec:
+      containers:
+      - name: mysql
+        imagePullPolicy: IfNotPresent
+        image: mysql:5.7
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "password"
+          - name: MYSQL_DATABASE
+            value: "wordpress"
+        volumeMounts:
+        - name: wp-mysql-strorage
+          mountPath: /var/lib/mysql # mysql容器的路径
+      volumes:
+      - name: wp-mysql-strorage
+        persistentVolumeClaim:
+          claimName: wp-mysql-pvc  ## 下面声明了
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-mysql-svc 
+  labels:
+    app: wordpress
+    type: mysql
+spec:
+  ports:  # mysql导出的端口
+  - port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: wordpress
+    type: mysql
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wp-mysql-pv
+  labels:
+    storage: nfs
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 200Mi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain # 值 delete Recycle Retain
+  nfs:
+    server: 192.168.0.102
+    path: /nfs1/wordpress
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wp-mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 200Mi
