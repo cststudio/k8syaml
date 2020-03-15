@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv1
+  labels:
+    storage: nfs
+spec:
+  accessModes: ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"] # 支持多模式，可能好些
+  #accessModes:
+  #  - ReadWriteMany
+  capacity:
+    storage: 200Mi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain # 值 delete Recycle Retain
+  nfs:
+    server: 192.168.0.102
+    path: /nfs1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv2
+spec:
+  capacity:
+    storage: 100Mi # 5Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 192.168.0.102
+    path: /nfs2
