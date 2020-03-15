@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv1
+  labels:
+    storage: nfs
+spec:
+  accessModes: ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"] # 支持多模式，可能好些
+  #accessModes:
+  #  - ReadWriteMany
+  capacity:
+    storage: 200Mi
+  volumeMode: Filesystem
+  persistentVolumeReclaimPolicy: Retain # 值 delete Recycle Retain
+  nfs:
+    server: 192.168.0.102
+    path: /nfs1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv2
+  labels:
+    storage: nfs
+spec:
+  capacity:
+    storage: 100Mi # 5Gi
+  accessModes: ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"]
+  nfs:
+    server: 192.168.0.102
+    path: /nfs2
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv3
+  labels:
+    storage: nfs
+spec:
+  capacity:
+    storage: 100Mi # 5Gi
+  accessModes: ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"]
+  nfs:
+    server: 192.168.0.102
+    path: /nfs3
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv4
+  labels:
+    storage: nfs
+spec:
+  capacity:
+    storage: 100Mi # 5Gi
+  accessModes: ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"]
+  nfs:
+    server: 192.168.0.102
+    path: /nfs4
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv5
+  labels:
+    storage: nfs
+spec:
+  capacity:
+    storage: 100Mi # 5Gi
+  accessModes: ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"]
+  nfs:
+    server: 192.168.0.102
+    path: /nfs5
