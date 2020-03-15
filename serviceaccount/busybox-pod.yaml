@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-pod
+spec:
+  containers:
+  - name: busybox-pod
+    image: latelee/busybox
+    imagePullPolicy: IfNotPresent
+    command: [ "/bin/sh", "-c", "sleep 3600" ]
+    volumeMounts:
+    - name: foo
+      mountPath: "/etc/foo"
+      readOnly: true
+  volumes:
+  - name: foo
+    secret:
+      secretName: mysecret
+  serviceAccountName: mysa
